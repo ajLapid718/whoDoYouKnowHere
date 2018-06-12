@@ -26,6 +26,19 @@ app.get('/', (req, res, next) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/login', (req, res, next) => {
+  req.session.csrf_string = randomString.generate();
+
+  const githubAuthUrl = 'https://github.com/login/oauth/authorize?' + qs.stringify({
+    client_id: process.env.CLIENT_ID,
+    redirect_uri: redirect_uri,
+    state: req.session.csrf_string,
+    scope: 'user:email'
+  })
+
+  res.redirect(githubAuthUrl);
+})
+
 app.listen(port, () => {
   console.log('Server is up and running at port ' + port);
 })
