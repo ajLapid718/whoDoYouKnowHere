@@ -12,3 +12,5 @@ const csrfString = randomString.generate();
 
 const port = process.env.PORT || 3000;
 const redirect_uri = process.env.HOST + '/redirect';
+
+app.use(express.static('views'));
