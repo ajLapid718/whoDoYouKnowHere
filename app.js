@@ -39,6 +39,29 @@ app.get('/login', (req, res, next) => {
   res.redirect(githubAuthUrl);
 })
 
+app.all('/redirect', (req, res) => {
+  const code = req.query.code; // first thing from request object sent by GitHub;
+  const returnedState = req.query.state; // second thing from request object sent by GitHub;
+
+  if (req.session.csrf_string === returnedState) {
+    request.post({
+      url: 'https://github.com/login/oauth/access_token?' + qs.stringify({
+        client_id: process.env.CLIENT_ID,
+        client_secret: process.env.CLIENT_SECRET,
+        code: code,
+        redirect_uri: redirect_uri,
+        state: req.session.csrf_string
+      })
+    }, (error, response, body) => {
+      req.session.access_token = qs.parse(body).access_token;
+      res.redirect('/user');
+    })
+  }
+  else {
+    res.redirect('/');
+  }
+});
+
 app.listen(port, () => {
   console.log('Server is up and running at port ' + port);
 })
