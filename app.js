@@ -21,3 +21,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+
+app.get('/', (req, res, next) => {
+  res.sendFile(__dirname + 'index/html');
+});
