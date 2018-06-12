@@ -25,3 +25,7 @@ app.use(session({
 app.get('/', (req, res, next) => {
   res.sendFile(__dirname + 'index/html');
 });
+
+app.listen(port, () => {
+  console.log('Server is up and running at port ' + port);
+})
