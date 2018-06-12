@@ -14,3 +14,10 @@ const port = process.env.PORT || 3000;
 const redirect_uri = process.env.HOST + '/redirect';
 
 app.use(express.static('views'));
+
+app.use(session({
+  secret: randomString.generate(),
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: false
+}));
